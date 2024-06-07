@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, KeyboardEvent, ChangeEvent, useRef, useEffect } from "react";
+import { useState, KeyboardEvent, ChangeEvent } from "react";
 import MessageBubble from "./MessageBubble";
-import { FiSend } from "react-icons/fi";
 import ChatInput from "./ChatInput";
 
 const Chatbot: React.FC = () => {
@@ -10,7 +9,6 @@ const Chatbot: React.FC = () => {
     []
   );
   const [input, setInput] = useState("");
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSend = () => {
     if (input.trim() === "") return;
@@ -21,7 +19,6 @@ const Chatbot: React.FC = () => {
       ...prevMessages,
       { user: "bot", text: "Esta es una respuesta automática" },
     ]);
-    resizeTextarea();
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -33,19 +30,7 @@ const Chatbot: React.FC = () => {
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setInput(event.target.value);
-    resizeTextarea();
   };
-
-  const resizeTextarea = () => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-    }
-  };
-
-  useEffect(() => {
-    resizeTextarea();
-  }, [input]);
 
   return (
     <div className="chat-container  border rounded shadow-lg w-[50%] mx-auto bg-white">
@@ -55,6 +40,7 @@ const Chatbot: React.FC = () => {
         ))}
       </div>
       <ChatInput
+        loading={false}
         input={input}
         handleChange={handleChange}
         handleKeyDown={handleKeyDown}

@@ -7,6 +7,7 @@ interface ChatInputProps {
   handleChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
   handleKeyDown: (event: KeyboardEvent<HTMLTextAreaElement>) => void;
   handleSend: () => void;
+  loading: boolean;
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({
@@ -14,6 +15,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
   handleChange,
   handleKeyDown,
   handleSend,
+  loading,
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -41,7 +43,8 @@ const ChatInput: React.FC<ChatInputProps> = ({
       />
       <button
         onClick={handleSend}
-        className="btn btn-primary self-end rounded-full p-0 w-12 h-12"
+        className="btn btn-primary self-end p-0 h-12 w-12 rounded-full"
+        disabled={loading || input.trim() === ""}
       >
         <FiSend className="text-xl" />
       </button>

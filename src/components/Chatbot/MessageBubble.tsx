@@ -1,5 +1,6 @@
 // components/MessageBubble.tsx
 import { motion } from "framer-motion";
+import { RiRobot2Line, RiUserLine } from "react-icons/ri";
 
 interface MessageBubbleProps {
   user: string;
@@ -18,10 +19,12 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ user, text }) => {
         className={`flex items-end ${user === "bot" ? "" : "flex-row-reverse"}`}
       >
         <div
-          className={`w-8 h-8 rounded-full bg-gray-300 ${
+          className={`w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center ${
             user === "bot" ? "mr-2" : "ml-2"
           }`}
-        ></div>
+        >
+          {user === "bot" ? <RiRobot2Line /> : <RiUserLine />}
+        </div>
         <div
           className={`inline-block p-2 rounded-lg ${
             user === "bot" ? "bg-blue-200 text-left" : "bg-green-200 text-right"
