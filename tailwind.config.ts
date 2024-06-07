@@ -17,7 +17,16 @@ const config: Config = {
   },
   plugins: [require('daisyui')],
   daisyui: {
-    themes: ["winter"],
+    themes: [
+      {
+        winter: {
+          ...require('daisyui/src/theming/themes')['winter'],
+          primary: '#20558a',
+          'primary-focus': '#173d67',
+          'primary-content': '#ffffff',
+        },
+      },
+    ],
   },
 };
 export default config;

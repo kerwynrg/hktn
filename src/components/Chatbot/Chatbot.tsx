@@ -2,6 +2,8 @@
 
 import { useState, KeyboardEvent, ChangeEvent, useRef, useEffect } from "react";
 import MessageBubble from "./MessageBubble";
+import { FiSend } from "react-icons/fi";
+import ChatInput from "./ChatInput";
 
 const Chatbot: React.FC = () => {
   const [messages, setMessages] = useState<{ user: string; text: string }[]>(
@@ -46,26 +48,18 @@ const Chatbot: React.FC = () => {
   }, [input]);
 
   return (
-    <div className="chat-container p-4 border rounded shadow-lg max-w-md mx-auto bg-white">
+    <div className="chat-container  border rounded shadow-lg w-[50%] mx-auto bg-white">
       <div className="messages space-y-4 mb-4 min-h-48 p-4">
         {messages.map((message, index) => (
           <MessageBubble key={index} user={message.user} text={message.text} />
         ))}
       </div>
-      <div className="input flex">
-        <textarea
-          ref={textareaRef}
-          value={input}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          className="textarea textarea-bordered w-full mr-2 resize-none"
-          placeholder="Escribe tu mensaje..."
-          rows={1}
-        />
-        <button onClick={handleSend} className="btn btn-primary">
-          Enviar
-        </button>
-      </div>
+      <ChatInput
+        input={input}
+        handleChange={handleChange}
+        handleKeyDown={handleKeyDown}
+        handleSend={handleSend}
+      />
     </div>
   );
 };

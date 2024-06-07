@@ -1,3 +1,6 @@
+// components/MessageBubble.tsx
+import { motion } from "framer-motion";
+
 interface MessageBubbleProps {
   user: string;
   text: string;
@@ -5,7 +8,12 @@ interface MessageBubbleProps {
 
 const MessageBubble: React.FC<MessageBubbleProps> = ({ user, text }) => {
   return (
-    <div className={`flex ${user === "bot" ? "justify-start" : "justify-end"}`}>
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className={`flex ${user === "bot" ? "justify-start" : "justify-end"}`}
+    >
       <div
         className={`flex items-end ${user === "bot" ? "" : "flex-row-reverse"}`}
       >
@@ -22,7 +30,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ user, text }) => {
           {text}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
