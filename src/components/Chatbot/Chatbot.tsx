@@ -18,7 +18,7 @@ const Chatbot: React.FC = () => {
 
   const sendMessageMutation = useSendMessage();
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (input.trim() === "") return;
     setMessages([
       ...messages,
@@ -26,7 +26,8 @@ const Chatbot: React.FC = () => {
       { user: "bot", text: "cargando", botThinking: true },
     ]);
 
-    sendMessageMutation.mutateAsync(input);
+    const data = await sendMessageMutation.mutateAsync(input);
+    console.log("🚀 ~ handleSend ~ data:", data);
 
     setInput("");
 
@@ -38,7 +39,7 @@ const Chatbot: React.FC = () => {
 
       setMessages((prevMessages) => {
         const lastitem = prevMessages[prevMessages.length - 1];
-        lastitem.text = "Danielo bb";
+        lastitem.text = "test bot text";
         lastitem.botThinking = false;
 
         return prevMessages;
