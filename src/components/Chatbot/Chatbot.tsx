@@ -4,7 +4,6 @@ import { useState, KeyboardEvent, ChangeEvent } from "react";
 import MessageBubble from "./MessageBubble";
 import ChatInput from "./ChatInput";
 import invokeModel from "@/../services/bedrockClient";
-import { useMutation } from "react-query";
 
 interface messageType {
   user: string;
@@ -17,19 +16,19 @@ const Chatbot: React.FC = () => {
   const [isLoading, setLoading] = useState(false);
   const [input, setInput] = useState("");
 
-  const mutation = useMutation(invokeModel, {
-    onSuccess: (data: string) => {
-      setLoading(false);
+  // const mutation = useMutation(invokeModel, {
+  //   onSuccess: (data: string) => {
+  //     setLoading(false);
 
-      setMessages((prevMessages) => {
-        const lastitem = prevMessages[prevMessages.length - 1];
-        lastitem.text = data;
-        lastitem.botThinking = false;
+  //     setMessages((prevMessages) => {
+  //       const lastitem = prevMessages[prevMessages.length - 1];
+  //       lastitem.text = data;
+  //       lastitem.botThinking = false;
 
-        return prevMessages;
-      });
-    },
-  });
+  //       return prevMessages;
+  //     });
+  //   },
+  // });
 
   const handleSend = async () => {
     if (input.trim() === "") return;
@@ -41,7 +40,10 @@ const Chatbot: React.FC = () => {
       { user: "bot", text: "cargando", botThinking: true },
     ]);
 
-    mutation.mutate(input);
+    // mutation.mutate(input);
+
+    const test = await invokeModel("text");
+
     setInput("");
   };
 
