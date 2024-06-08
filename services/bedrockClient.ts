@@ -1,20 +1,25 @@
 import axios from 'axios';
 import { useMutation } from 'react-query';
 
-const BEDROCK_AGENT_URL = process.env.BEDROCK_AGENT_URL || 'http://localhost:8000';
-const BEDROCK_API_KEY = process.env.BEDROCK_API_KEY || 'your-api-key';
+import AWS from '../aws-config';
 
-export const useSendMessage = () => {
-  return useMutation(async (message: string) => {
-    console.log("🚀 ~ returnuseMutation ~ message:", message)
-    const config = {
-      headers: {
-        'Authorization': `Bearer ${BEDROCK_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-    };
+const bedrock = new AWS.Service({
+  // @ts-ignore
+  apiConfig: require('../bedrock-sdk-config.json'),
+});
 
-    const response = await axios.post(`${BEDROCK_AGENT_URL}/chat`, { message }, config);
-    return response.data;
-  });
+const invokeModel = async (input: string) => {
+  try {
+    // @ts-ignore
+    const response = await bedrock.invokeModel({
+      modelId: 'tu-modelo-id',
+      input: { message: input },
+    }).promise();
+    return response.result;
+  } catch (error) {
+    console.error('Error invoking model:', error);
+    throw new Error('Failed to invoke model');
+  }
 };
+
+export default invokeModel;

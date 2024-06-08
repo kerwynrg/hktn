@@ -3,7 +3,8 @@
 import { useState, KeyboardEvent, ChangeEvent } from "react";
 import MessageBubble from "./MessageBubble";
 import ChatInput from "./ChatInput";
-import { useSendMessage } from "@/../services/bedrockClient";
+import invokeModel from "@/../services/bedrockClient";
+import { useMutation } from "react-query";
 
 interface messageType {
   user: string;
@@ -16,35 +17,32 @@ const Chatbot: React.FC = () => {
   const [isLoading, setLoading] = useState(false);
   const [input, setInput] = useState("");
 
-  const sendMessageMutation = useSendMessage();
+  const mutation = useMutation(invokeModel, {
+    onSuccess: (data: string) => {
+      setLoading(false);
+
+      setMessages((prevMessages) => {
+        const lastitem = prevMessages[prevMessages.length - 1];
+        lastitem.text = data;
+        lastitem.botThinking = false;
+
+        return prevMessages;
+      });
+    },
+  });
 
   const handleSend = async () => {
     if (input.trim() === "") return;
+    setLoading(true);
+
     setMessages([
       ...messages,
       { user: "user", text: input },
       { user: "bot", text: "cargando", botThinking: true },
     ]);
 
-    const data = await sendMessageMutation.mutateAsync(input);
-    console.log("🚀 ~ handleSend ~ data:", data);
-
+    mutation.mutate(input);
     setInput("");
-
-    setLoading(true);
-
-    // Aquí podrías añadir la lógica para enviar el mensaje a una API o procesar la respuesta
-    setTimeout(() => {
-      setLoading(false);
-
-      setMessages((prevMessages) => {
-        const lastitem = prevMessages[prevMessages.length - 1];
-        lastitem.text = "test bot text";
-        lastitem.botThinking = false;
-
-        return prevMessages;
-      });
-    }, 1000);
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {

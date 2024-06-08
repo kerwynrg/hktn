@@ -1,0 +1,37 @@
+{
+  "version": "1.0",
+  "metadataService": {
+    "endpoint": "https://bedrock.us-west-2.amazonaws.com",
+    "serviceName": "bedrock",
+    "signatureVersion": "v4",
+    "signingName": "bedrock",
+    "region": "us-west-2"
+  },
+  "operations": {
+    "InvokeModel": {
+      "http": {
+        "method": "POST",
+        "requestUri": "/models/{modelId}/invoke"
+      },
+      "input": {
+        "type": "structure",
+        "required": ["modelId", "input"],
+        "members": {
+          "modelId": {
+            "location": "uri",
+            "locationName": "modelId"
+          },
+          "input": {
+            "location": "body"
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "result": {}
+        }
+      }
+    }
+  }
+}
