@@ -18,3 +18,8 @@
   outline-width: 0;
   outline-offset: 0;
 }
+
+.messages {
+  height: 50vh;
+  overflow: auto;
+}
