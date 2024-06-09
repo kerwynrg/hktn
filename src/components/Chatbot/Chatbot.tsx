@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import MessageBubble from "./MessageBubble";
 import ChatInput from "./ChatInput";
-import invokeAgent from "@/../services/bedrockClient";
+import invokeAgent from "../../../lib/bedrockClient";
 
 interface messageType {
   user: string;
