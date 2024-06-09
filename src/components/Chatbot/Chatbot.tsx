@@ -3,7 +3,7 @@
 import { useState, KeyboardEvent, ChangeEvent } from "react";
 import MessageBubble from "./MessageBubble";
 import ChatInput from "./ChatInput";
-import invokeModel from "@/../services/bedrockClient";
+import invokeAgent from "@/../services/bedrockClient";
 
 interface messageType {
   user: string;
@@ -42,7 +42,7 @@ const Chatbot: React.FC = () => {
 
     // mutation.mutate(input);
 
-    const test = await invokeModel("text");
+    const test = await invokeAgent(input.trim());
 
     setInput("");
   };
