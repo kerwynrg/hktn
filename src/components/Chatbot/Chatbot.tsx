@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, KeyboardEvent, ChangeEvent } from "react";
+import { useState, useEffect, useRef } from "react";
 import MessageBubble from "./MessageBubble";
 import ChatInput from "./ChatInput";
 import invokeAgent from "@/../services/bedrockClient";
@@ -14,20 +14,14 @@ interface messageType {
 const Chatbot: React.FC = () => {
   const [messages, setMessages] = useState<messageType[]>([]);
   const [isLoading, setLoading] = useState(false);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  // const mutation = useMutation(invokeModel, {
-  //   onSuccess: (data: string) => {
-  //     setLoading(false);
-
-  //     setMessages((prevMessages) => {
-  //       const lastitem = prevMessages[prevMessages.length - 1];
-  //       lastitem.text = data;
-  //       lastitem.botThinking = false;
-
-  //       return prevMessages;
-  //     });
-  //   },
-  // });
+  const setBotMessage = (botMessage: string | undefined) => {
+    setMessages((prevMessages) => [
+      ...prevMessages.slice(0, -1),
+      { user: "bot", text: botMessage || "Failed!!!", botThinking: false },
+    ]);
+  };
 
   const handleSend = async (inputText: string) => {
     if (inputText.trim() === "") return;
@@ -39,21 +33,26 @@ const Chatbot: React.FC = () => {
       { user: "bot", text: "cargando", botThinking: true },
     ]);
 
-    // mutation.mutate(inputText);
-
     const botMessage = await invokeAgent(inputText);
 
-    setMessages((prevMessages) => [
-      ...prevMessages.slice(0, -1),
-      { user: "bot", text: botMessage || 'Failed!!!', botThinking: false },
-    ]);
-
+    setBotMessage(botMessage);
     setLoading(false);
   };
 
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   return (
-    <div className="chat-container  border rounded shadow-lg w-[50%] mx-auto bg-white">
-      <div className="messages space-y-4 mb-4 min-h-48 p-4">
+    <div className="border rounded shadow-lg w-[80%] h-[80vh] mx-auto bg-white flex flex-col overflow-hidden">
+      <div
+        id="chatcontainer"
+        ref={chatContainerRef}
+        className="messages space-y-4 mb-4 min-h-48 px-12 pt-12 pb-10 flex-1 overflow-y-scroll"
+      >
         {messages.map(({ user, text, botThinking }, index) => (
           <MessageBubble
             key={index}
@@ -63,10 +62,7 @@ const Chatbot: React.FC = () => {
           />
         ))}
       </div>
-      <ChatInput
-        loading={isLoading}
-        onSend={handleSend}
-      />
+      <ChatInput loading={isLoading} onSend={handleSend} />
     </div>
   );
 };

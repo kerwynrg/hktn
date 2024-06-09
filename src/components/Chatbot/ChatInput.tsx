@@ -1,5 +1,5 @@
 // components/ChatInput.tsx
-import { ChangeEvent, KeyboardEvent, useRef, useState, useEffect, useCallback } from "react";
+import { ChangeEvent, KeyboardEvent, useRef, useState, useEffect } from "react";
 import { FiSend } from "react-icons/fi";
 
 interface ChatInputProps {
@@ -7,12 +7,9 @@ interface ChatInputProps {
   loading: boolean;
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({
-  onSend,
-  loading,
-}) => {
+const ChatInput: React.FC<ChatInputProps> = ({ onSend, loading }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
 
   const resizeTextarea = () => {
     if (textareaRef.current) {
@@ -25,6 +22,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
       onSend(input.trim());
+      setInput("");
     }
   };
 
@@ -33,10 +31,9 @@ const ChatInput: React.FC<ChatInputProps> = ({
   };
 
   const handleSend = async () => {
-    if (input.trim() === '') return;
-
-    setInput('');
+    if (input.trim() === "") return;
     onSend(input.trim());
+    setInput("");
   };
 
   useEffect(() => {
@@ -51,13 +48,13 @@ const ChatInput: React.FC<ChatInputProps> = ({
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         className="textarea w-full mr-2 resize-none border-none"
-        placeholder="Escribe tu mensaje..."
+        placeholder="Message the chat..."
         rows={1}
       />
       <button
         onClick={handleSend}
         className="btn btn-primary self-end p-0 h-12 w-12 rounded-full"
-        disabled={loading || input.trim() === ''}
+        disabled={loading || input.trim() === ""}
       >
         <FiSend className="text-xl" />
       </button>
