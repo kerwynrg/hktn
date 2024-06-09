@@ -1,19 +1,22 @@
+'use server'
+
 import { BedrockAgentRuntimeClient, InvokeAgentCommand, type InvokeAgentCommandInput } from '@aws-sdk/client-bedrock-agent-runtime';
-import { v4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 const client = new BedrockAgentRuntimeClient({
-  region: "us-west-2",
+  region: process.env.AWS_REGION,
   credentials: {
-    accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID || '',
-    secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY || '',
+    accessKeyId: process.env.AWS_ACCESS_KEY!,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!
   },
 });
 
 const payload: InvokeAgentCommandInput = {
-  agentId: 'FA9XCNRFEX',
-  agentAliasId: 'OQJ4VXJICI',
-  sessionId: v4(),
+  agentId: process.env.AWS_AGENT_ID!,
+  agentAliasId: process.env.AWS_AGENT_ALIAS_ID!,
+  sessionId: uuidv4(),
   // inputText: PROMPT,
+  // enableTrace: true
 };
 
 const invokeAgent = async (input: string) => {
@@ -21,6 +24,8 @@ const invokeAgent = async (input: string) => {
     const command = new InvokeAgentCommand({ ...payload, inputText: input });
     // const command = new ConverseCommand(payload);
     const response = await client.send(command);
+
+    console.log("🚀 ~ invokeAgent ~ response:", response);
 
     if (!response.completion) {
       return
@@ -36,7 +41,13 @@ const invokeAgent = async (input: string) => {
       }
     }
 
-    console.log("🚀 ~ invokeModel ~ response:", completion)
+    // Decode and return the response(s)
+    // const decodedResponseBody = new TextDecoder().decode((response as any).body);
+    // /** @type {ResponseBody} */
+    // const responseBody = JSON.parse(decodedResponseBody);
+    // const responses = responseBody.content;
+
+    console.log("🚀 ~ invokeAgent ~ text:", completion);
 
     return completion
   } catch (error) {
