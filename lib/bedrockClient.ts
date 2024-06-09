@@ -1,3 +1,5 @@
+'use server'
+
 import { BedrockAgentRuntimeClient, InvokeAgentCommand, type InvokeAgentCommandInput } from '@aws-sdk/client-bedrock-agent-runtime';
 import { v4 as uuidv4 } from 'uuid';
 
