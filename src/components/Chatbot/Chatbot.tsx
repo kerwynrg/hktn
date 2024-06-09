@@ -14,7 +14,6 @@ interface messageType {
 const Chatbot: React.FC = () => {
   const [messages, setMessages] = useState<messageType[]>([]);
   const [isLoading, setLoading] = useState(false);
-  const [input, setInput] = useState("");
 
   // const mutation = useMutation(invokeModel, {
   //   onSuccess: (data: string) => {
@@ -30,38 +29,26 @@ const Chatbot: React.FC = () => {
   //   },
   // });
 
-  const handleSend = async () => {
-    if (input.trim() === "") return;
+  const handleSend = async (inputText: string) => {
+    if (inputText.trim() === "") return;
     setLoading(true);
-    setInput("");
 
     setMessages((prevMessages) => [
       ...prevMessages,
-      { user: "user", text: input },
+      { user: "user", text: inputText },
       { user: "bot", text: "cargando", botThinking: true },
     ]);
 
-    // mutation.mutate(input);
+    // mutation.mutate(inputText);
 
-    const botMessage = await invokeAgent(input.trim());
+    const botMessage = await invokeAgent(inputText);
 
     setMessages((prevMessages) => [
       ...prevMessages.slice(0, -1),
       { user: "bot", text: botMessage || 'Failed!!!', botThinking: false },
     ]);
 
-    setLoading(true);
-  };
-
-  const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault();
-      handleSend();
-    }
-  };
-
-  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setInput(event.target.value);
+    setLoading(false);
   };
 
   return (
@@ -78,10 +65,7 @@ const Chatbot: React.FC = () => {
       </div>
       <ChatInput
         loading={isLoading}
-        input={input}
-        handleChange={handleChange}
-        handleKeyDown={handleKeyDown}
-        handleSend={handleSend}
+        onSend={handleSend}
       />
     </div>
   );

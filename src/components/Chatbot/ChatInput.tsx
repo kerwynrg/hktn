@@ -1,29 +1,42 @@
 // components/ChatInput.tsx
-import { ChangeEvent, KeyboardEvent, useRef, useEffect } from "react";
+import { ChangeEvent, KeyboardEvent, useRef, useState, useEffect, useCallback } from "react";
 import { FiSend } from "react-icons/fi";
 
 interface ChatInputProps {
-  input: string;
-  handleChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
-  handleKeyDown: (event: KeyboardEvent<HTMLTextAreaElement>) => void;
-  handleSend: () => void;
+  onSend: (inputText: string) => void;
   loading: boolean;
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({
-  input,
-  handleChange,
-  handleKeyDown,
-  handleSend,
+  onSend,
   loading,
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [input, setInput] = useState('');
 
   const resizeTextarea = () => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      onSend(input.trim());
+    }
+  };
+
+  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setInput(event.target.value);
+  };
+
+  const handleSend = async () => {
+    if (input.trim() === '') return;
+
+    setInput('');
+    onSend(input.trim());
   };
 
   useEffect(() => {
@@ -44,7 +57,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
       <button
         onClick={handleSend}
         className="btn btn-primary self-end p-0 h-12 w-12 rounded-full"
-        disabled={loading || input.trim() === ""}
+        disabled={loading || input.trim() === ''}
       >
         <FiSend className="text-xl" />
       </button>
