@@ -33,18 +33,24 @@ const Chatbot: React.FC = () => {
   const handleSend = async () => {
     if (input.trim() === "") return;
     setLoading(true);
+    setInput("");
 
-    setMessages([
-      ...messages,
+    setMessages((prevMessages) => [
+      ...prevMessages,
       { user: "user", text: input },
       { user: "bot", text: "cargando", botThinking: true },
     ]);
 
     // mutation.mutate(input);
 
-    const test = await invokeAgent(input.trim());
+    const botMessage = await invokeAgent(input.trim());
 
-    setInput("");
+    setMessages((prevMessages) => [
+      ...prevMessages.slice(0, -1),
+      { user: "bot", text: botMessage || 'Failed!!!', botThinking: false },
+    ]);
+
+    setLoading(true);
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
