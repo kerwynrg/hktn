@@ -6,7 +6,7 @@ import { RiRobot2Line, RiUserLine } from "react-icons/ri";
 
 interface MessageBubbleProps {
   user: string;
-  text?: string | TrustedHTML;
+  text?: string | ReactNode;
   botThinking?: boolean;
 }
 
