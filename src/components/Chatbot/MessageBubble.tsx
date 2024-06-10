@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { RiRobot2Line, RiUserLine } from "react-icons/ri";
 // components/MessageBubble.tsx
 
@@ -25,18 +26,21 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
           user === "bot" ? "" : "flex-row-reverse"
         }`}
       >
+        {user !== "bot" ? (
+          <div
+            className={`w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center ml-2`}
+          >
+            {user === "bot" ? <RiRobot2Line /> : <RiUserLine />}
+          </div>
+        ) : (
+          <div className="mr-2">
+            <Image src={"/SVG/logo_1.svg"} alt="logo" width={32} height={32} />
+          </div>
+        )}
+
         <div
-          className={`w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center ${
-            user === "bot" ? "mr-2" : "ml-2"
-          }`}
-        >
-          {user === "bot" ? <RiRobot2Line /> : <RiUserLine />}
-        </div>
-        <div
-          className={`inline-block p-2 rounded-lg ${
-            user === "bot"
-              ? "bg-blue-200 text-left max-w-[80%]"
-              : "bg-green-200 text-right max-w-[80%]"
+          className={`inline-block p-2 rounded-lg md:max-w-[80%] max-w-[90%]   ${
+            user === "bot" ? "bg-blue-200 text-left" : "bg-green-200 text-right"
           }`}
         >
           {botThinking && user === "bot" ? (
