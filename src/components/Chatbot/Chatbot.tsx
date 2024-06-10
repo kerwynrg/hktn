@@ -78,11 +78,11 @@ const Chatbot: React.FC = () => {
   }, [messages]);
 
   return (
-    <div className="border rounded shadow-lg w-[80%] h-[80vh] mx-auto bg-white flex flex-col overflow-hidden">
+    <div className="border rounded shadow-lg md:w-[80%] h-[80vh] mx-auto bg-white flex flex-col overflow-hidden w-[100%]">
       <div
         id="chatcontainer"
         ref={chatContainerRef}
-        className="messages space-y-4 mb-4 min-h-48 px-12 pt-12 pb-10 flex-1 overflow-y-scroll"
+        className="messages space-y-4 mb-4 min-h-48 flex-1 overflow-y-scroll md:p-12 p-3 "
       >
         {messages.map(({ user, text, botThinking }, index) => (
           <MessageBubble
