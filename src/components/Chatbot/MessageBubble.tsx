@@ -1,10 +1,11 @@
+import { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { RiRobot2Line, RiUserLine } from "react-icons/ri";
 // components/MessageBubble.tsx
 
 interface MessageBubbleProps {
   user: string;
-  text?: string;
+  text?: string | ReactNode;
   botThinking?: boolean;
 }
 

@@ -1,14 +1,38 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, ReactNode } from "react";
 import MessageBubble from "./MessageBubble";
 import ChatInput from "./ChatInput";
-import invokeAgent from "../../../lib/bedrockClient";
+import { initClient, invokeAgent } from "../../../lib/bedrockClient";
 
 interface messageType {
   user: string;
-  text: string;
+  text: string | ReactNode;
   botThinking?: boolean;
+}
+
+const getFormattedBotMessage = (botMessage?: string) => {
+  console.log('FORMATTED', botMessage)
+  if (!botMessage) {
+    return 'Sorry. Failed to get response.'
+  }
+
+  if (botMessage.includes('\n')) {
+    const messageLines = botMessage.split('\n');
+    const formattedMessage = messageLines.map((lineText, index) => {
+      if (!lineText) {
+        return <br key={index} />
+      }
+
+      const isStudy = lineText.includes('NCT') && !lineText.endsWith('NCTID.')
+
+      return isStudy ? <div key={index}><br /> - {lineText}</div> : <div key={index}><b>{lineText}</b></div>
+    })
+
+    return formattedMessage;
+  }
+
+  return botMessage;
 }
 
 const Chatbot: React.FC = () => {
@@ -16,10 +40,13 @@ const Chatbot: React.FC = () => {
   const [isLoading, setLoading] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  const setBotMessage = (botMessage: string | undefined) => {
+  const setBotMessage = (botMessage?: string) => {
+
+    const formattedMessage = getFormattedBotMessage(botMessage)
+
     setMessages((prevMessages) => [
       ...prevMessages.slice(0, -1),
-      { user: "bot", text: botMessage || "Failed!!!", botThinking: false },
+      { user: "bot", text: formattedMessage, botThinking: false },
     ]);
   };
 
@@ -38,6 +65,10 @@ const Chatbot: React.FC = () => {
     setBotMessage(botMessage);
     setLoading(false);
   };
+
+  useEffect(() => {
+    initClient()
+  }, [])
 
   useEffect(() => {
     if (chatContainerRef.current) {

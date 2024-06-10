@@ -11,25 +11,28 @@ import {
   AWS_AGENT_ALIAS_ID
 } from './constants'
 
-const client = new BedrockAgentRuntimeClient({
-  region: AWS_REGION,
-  credentials: {
-    accessKeyId: AWS_ACCESS_KEY,
-    secretAccessKey: AWS_SECRET_ACCESS_KEY
-  },
-});
+let client: BedrockAgentRuntimeClient;
+let defaultPayload: InvokeAgentCommandInput;
 
-const payload: InvokeAgentCommandInput = {
-  agentId: AWS_AGENT_ID,
-  agentAliasId: AWS_AGENT_ALIAS_ID,
-  sessionId: uuidv4(),
-  // inputText: PROMPT,
-  // enableTrace: true
-};
+export const initClient = () => {
+  client = new BedrockAgentRuntimeClient({
+    region: AWS_REGION,
+    credentials: {
+      accessKeyId: AWS_ACCESS_KEY,
+      secretAccessKey: AWS_SECRET_ACCESS_KEY
+    },
+  });
 
-const invokeAgent = async (input: string) => {
+  defaultPayload = {
+    agentId: AWS_AGENT_ID,
+    agentAliasId: AWS_AGENT_ALIAS_ID,
+    sessionId: uuidv4(),
+  };
+}
+
+export const invokeAgent = async (input: string) => {
   try {
-    const command = new InvokeAgentCommand({ ...payload, inputText: input });
+    const command = new InvokeAgentCommand({ ...defaultPayload, inputText: input });
     // const command = new ConverseCommand(payload);
     const response = await client.send(command);
 
@@ -63,5 +66,3 @@ const invokeAgent = async (input: string) => {
     throw new Error('Failed to invoke model');
   }
 };
-
-export default invokeAgent;
