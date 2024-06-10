@@ -14,7 +14,7 @@ export default function Home() {
           className="responsive-image"
         />
       </div>
-      <h1 className="text-2xl font-bold mb-4 text-center">Healharmony Chat</h1>
+      <h1 className="text-2xl font-bold mb-4 text-center">Healharmony AI</h1>
       <Chatbot />
     </main>
   );
