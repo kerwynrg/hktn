@@ -12,28 +12,36 @@ interface messageType {
 }
 
 const getFormattedBotMessage = (botMessage?: string) => {
-  console.log('FORMATTED', botMessage)
+  console.log("FORMATTED", botMessage);
   if (!botMessage) {
-    return 'Sorry. Failed to get response.'
+    return "Sorry. Failed to get response.";
   }
 
-  if (botMessage.includes('\n')) {
-    const messageLines = botMessage.split('\n');
+  if (botMessage.includes("\n")) {
+    const messageLines = botMessage.split("\n");
     const formattedMessage = messageLines.map((lineText, index) => {
       if (!lineText) {
-        return <br key={index} />
+        return <br key={index} />;
       }
 
-      const isStudy = lineText.includes('NCT') && !lineText.endsWith('NCTID.')
+      const isStudy = lineText.includes("NCT") && !lineText.endsWith("NCTID.");
 
-      return isStudy ? <div key={index}><br /> - {lineText}</div> : <div key={index}><b>{lineText}</b></div>
-    })
+      return isStudy ? (
+        <div key={index}>
+          <br /> - {lineText}
+        </div>
+      ) : (
+        <div key={index}>
+          <b>{lineText}</b>
+        </div>
+      );
+    });
 
     return formattedMessage;
   }
 
   return botMessage;
-}
+};
 
 const Chatbot: React.FC = () => {
   const [messages, setMessages] = useState<messageType[]>([]);
@@ -41,8 +49,7 @@ const Chatbot: React.FC = () => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   const setBotMessage = (botMessage?: string) => {
-
-    const formattedMessage = getFormattedBotMessage(botMessage)
+    const formattedMessage = getFormattedBotMessage(botMessage);
 
     setMessages((prevMessages) => [
       ...prevMessages.slice(0, -1),
@@ -67,8 +74,8 @@ const Chatbot: React.FC = () => {
   };
 
   useEffect(() => {
-    initClient()
-  }, [])
+    initClient();
+  }, []);
 
   useEffect(() => {
     if (chatContainerRef.current) {
