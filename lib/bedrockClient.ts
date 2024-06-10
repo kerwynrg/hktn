@@ -3,17 +3,25 @@
 import { BedrockAgentRuntimeClient, InvokeAgentCommand, type InvokeAgentCommandInput } from '@aws-sdk/client-bedrock-agent-runtime';
 import { v4 as uuidv4 } from 'uuid';
 
+import {
+  AWS_REGION,
+  AWS_ACCESS_KEY,
+  AWS_SECRET_ACCESS_KEY,
+  AWS_AGENT_ID,
+  AWS_AGENT_ALIAS_ID
+} from './constants'
+
 const client = new BedrockAgentRuntimeClient({
-  region: process.env.AWS_REGION,
+  region: AWS_REGION,
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY!,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!
+    accessKeyId: AWS_ACCESS_KEY,
+    secretAccessKey: AWS_SECRET_ACCESS_KEY
   },
 });
 
 const payload: InvokeAgentCommandInput = {
-  agentId: process.env.AWS_AGENT_ID!,
-  agentAliasId: process.env.AWS_AGENT_ALIAS_ID!,
+  agentId: AWS_AGENT_ID,
+  agentAliasId: AWS_AGENT_ALIAS_ID,
   sessionId: uuidv4(),
   // inputText: PROMPT,
   // enableTrace: true
