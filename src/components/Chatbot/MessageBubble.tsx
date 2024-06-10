@@ -6,7 +6,7 @@ import { RiRobot2Line, RiUserLine } from "react-icons/ri";
 
 interface MessageBubbleProps {
   user: string;
-  text?: string | TrustedHTML;
+  text?: string | ReactNode;
   botThinking?: boolean;
 }
 
@@ -47,7 +47,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
           {botThinking && user === "bot" ? (
             <span className="loading loading-dots loading-sm" />
           ) : (
-            <div dangerouslySetInnerHTML={{ __html: text || "" }} />
+            text
           )}
         </div>
       </div>
