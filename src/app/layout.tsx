@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Matching Patients with Clinical Trials",
+  title: "Healharmony AI",
 };
 
 export default function RootLayout({
