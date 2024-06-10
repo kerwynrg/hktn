@@ -47,7 +47,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
           {botThinking && user === "bot" ? (
             <span className="loading loading-dots loading-sm" />
           ) : (
-            <div dangerouslySetInnerHTML={{ __html: text || "" }} />
+            text
           )}
         </div>
       </div>
